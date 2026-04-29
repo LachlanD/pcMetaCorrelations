@@ -4,18 +4,19 @@ template:
   params:
     bootswatch: flatly
 
-build:
-  exclude:
-    - copilot-instructions.md
-
 navbar:
   structure:
     - text: Home
       href: index.html
+    - text: Get started
+      href: articles/get-started.html
     - text: Reference
       href: reference/index.html
 
-articles: []
+articles:
+  - title: Get started
+    contents:
+      - get-started
 
 reference:
   - title: Functions

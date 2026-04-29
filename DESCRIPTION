@@ -11,9 +11,12 @@ Encoding: UTF-8
 Imports:
     ggplot2
 Suggests:
-    testthat (>= 3.0.0),
+    knitr,
+    pkgdown,
+    rmarkdown,
     Seurat,
-    pkgdown
+    testthat (>= 3.0.0)
+VignetteBuilder: knitr
 URL: https://github.com/pcMetaCorrelations/pcMetaCorrelations
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3

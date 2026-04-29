@@ -1,8 +1,9 @@
 pandoc: 3.9.0.2
 pkgdown: 2.2.0
 pkgdown_sha: ~
-articles: {}
-last_built: 2026-04-29T01:52Z
+articles:
+  get-started: get-started.html
+last_built: 2026-04-29T02:19Z
 urls:
   reference: https://github.com/pcMetaCorrelations/pcMetaCorrelations/reference
   article: https://github.com/pcMetaCorrelations/pcMetaCorrelations/articles

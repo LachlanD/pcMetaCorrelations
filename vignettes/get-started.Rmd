@@ -1,0 +1,47 @@
+---
+title: "Get started"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Get started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Get started
+
+This vignette demonstrates how to use `pc_meta_correlations` on real Seurat data and visualize the results.
+
+## Install and load
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r}
+library(pcMetaCorrelations)
+```
+
+## Run the workflow on Seurat PBMC data
+
+This example uses `Seurat::pbmc_small` to compute metadata correlations with PCA axes.
+
+```{r}
+if (!requireNamespace("Seurat", quietly = TRUE)) {
+  stop("Please install Seurat to run this example.")
+}
+
+data("pbmc_small", package = "SeuratObject")
+seurat_obj <- pbmc_small
+res <- pc_meta_correlations(seurat_obj, reduction = "pca")
+res
+```
+
+## Plot the results
+
+```{r}
+plot_pc_meta_heatmap(res)
+plot_top_pc_meta(res, n = 5, value = "effect_size")
+```
