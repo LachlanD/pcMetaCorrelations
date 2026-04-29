@@ -1,0 +1,25 @@
+url: https://github.com/pcMetaCorrelations/pcMetaCorrelations
+
+template:
+  params:
+    bootswatch: flatly
+
+build:
+  exclude:
+    - copilot-instructions.md
+
+navbar:
+  structure:
+    - text: Home
+      href: index.html
+    - text: Reference
+      href: reference/index.html
+
+articles: []
+
+reference:
+  - title: Functions
+    contents:
+      - pc_meta_correlations
+      - plot_pc_meta_heatmap
+      - plot_top_pc_meta
