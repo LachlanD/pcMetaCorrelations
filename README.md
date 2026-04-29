@@ -15,4 +15,5 @@ devtools::install_local("../pcMetaCorrelations")
 library(pcMetaCorrelations)
 res <- pc_meta_correlations(pca_matrix, metadata)
 plot_pc_meta_heatmap(res)
+plot_top_pc_meta(res, n = 10, value = "effect_size")
 ```

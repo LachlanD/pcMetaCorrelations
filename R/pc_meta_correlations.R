@@ -1,3 +1,5 @@
+utils::globalVariables(c("pc", "metadata", "type"))
+
 #' Identify associations between principal components and metadata variables
 #'
 #' `pc_meta_correlations()` computes associations between PCA axes and metadata
@@ -128,7 +130,7 @@ pc_meta_correlations <- function(
 
       if (var_type == "numeric") {
         if (length(unique(meta_sub)) < 2L) next
-        test <- suppressWarnings(cor.test(pc_sub, meta_sub, method = method))
+        test <- suppressWarnings(stats::cor.test(pc_sub, meta_sub, method = method))
         statistic <- as.numeric(test$estimate)
         pval <- test$p.value
         effect <- abs(statistic)
