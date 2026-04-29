@@ -50,18 +50,25 @@ plot_top_pc_meta(res, n = 5, value = "effect_size")
 
 ## Richer metadata example
 
-The `SeuratData` package provides larger example datasets.
-If installed, `pbmc3k.final` contains more metadata columns and strong PC associations.
+The `SeuratData` package provides larger example datasets. `celegans.embryo` includes more than 20 metadata columns, making it a strong example for metadata-PC association discovery.
 
 ```{r}
 if (requireNamespace("SeuratData", quietly = TRUE)) {
-  SeuratData::InstallData("pbmc3k")
-  data("pbmc3k.final", package = "pbmc3k.SeuratData")
-  pbmc3k.final <- Seurat::UpdateSeuratObject(pbmc3k.final)
+  SeuratData::InstallData("celegans.embryo")
+  data("celegans.embryo", package = "celegans.embryo.SeuratData")
+  celegans.embryo <- Seurat::UpdateSeuratObject(celegans.embryo)
+  if (!"pca" %in% names(celegans.embryo@reductions)) {
+    if (!length(Seurat::VariableFeatures(celegans.embryo))) {
+      celegans.embryo <- Seurat::FindVariableFeatures(celegans.embryo, verbose = FALSE)
+    }
+    celegans.embryo <- Seurat::ScaleData(celegans.embryo, features = Seurat::VariableFeatures(celegans.embryo), verbose = FALSE)
+    celegans.embryo <- Seurat::RunPCA(celegans.embryo, verbose = FALSE)
+  }
 
-  res2 <- pc_meta_correlations(pbmc3k.final, reduction = "pca", mode = "lm")
+  res2 <- pc_meta_correlations(celegans.embryo, reduction = "pca", mode = "lm")
   head(res2)
-  plot_pc_meta_heatmap(res2, top_n = 15, top_pcs = 8)
+  plot_pc_meta_heatmap(res2, top_n = 20, top_pcs = 8)
+  plot_top_pc_meta(res2, n = 10, value = "effect_size")
 }
 ```
 

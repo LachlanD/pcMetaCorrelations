@@ -55,14 +55,16 @@ if (requireNamespace("Seurat", quietly = TRUE)) {
 
 ## Rich metadata example
 
-For a larger Seurat dataset with more metadata, use `SeuratData::pbmc3k.final` if `SeuratData` is installed.
+A richer metadata example is available from `SeuratData::celegans.embryo`, which contains more than 20 metadata columns.
 
 ```r
 if (requireNamespace("SeuratData", quietly = TRUE)) {
-  SeuratData::InstallData("pbmc3k")
-  SeuratData::LoadData("pbmc3k")
-  res <- pc_meta_correlations(pbmc3k.final, reduction = "pca", mode = "lm")
-  plot_pc_meta_heatmap(res, top_n = 15, top_pcs = 8)
+  SeuratData::InstallData("celegans.embryo")
+  data("celegans.embryo", package = "celegans.embryo.SeuratData")
+  celegans.embryo <- Seurat::UpdateSeuratObject(celegans.embryo)
+  res2 <- pc_meta_correlations(celegans.embryo, reduction = "pca", mode = "lm")
+  plot_pc_meta_heatmap(res2, top_n = 15, top_pcs = 8)
+  plot_top_pc_meta(res2, n = 10, value = "effect_size")
 }
 ```
 
