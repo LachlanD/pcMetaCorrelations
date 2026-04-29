@@ -10,6 +10,7 @@ pc_meta_correlations(
   reduction = "pca",
   meta.cols = NULL,
   method = c("pearson", "spearman"),
+  mode = c("lm", "correlation"),
   adjust = c("BH", "bonferroni", "none"),
   min.cells = 10,
   verbose = TRUE
@@ -29,8 +30,11 @@ object. Default: \code{"pca"}.}
 \item{meta.cols}{Character or integer vector of metadata columns to analyse.
 Default: all columns.}
 
-\item{method}{Correlation method for numeric metadata: \code{"pearson"} or
-\code{"spearman"}.}
+\item{method}{Correlation method for numeric metadata or ranking method for
+linear-model mode: \code{"pearson"} or \code{"spearman"}.}
+
+\item{mode}{Analysis mode: \code{"lm"} for linear regression or \code{"correlation"}
+for simple correlation/ANOVA.}
 
 \item{adjust}{p-value adjustment method passed to \code{p.adjust()}.
 Default: \code{"BH"}.}

@@ -9,9 +9,9 @@ vignette: >
 
 # Get started
 
-This vignette demonstrates how to use `pc_meta_correlations` on real Seurat data and visualize the results.
+This vignette demonstrates how to use `pc_meta_correlations` on Seurat data and visualize the results.
 
-## Install and load
+## Setup
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
@@ -24,9 +24,11 @@ knitr::opts_chunk$set(
 library(pcMetaCorrelations)
 ```
 
-## Run the workflow on Seurat PBMC data
+## Linear-model mode
 
-This example uses `Seurat::pbmc_small` to compute metadata correlations with PCA axes.
+The default analysis mode is `lm`, which fits a separate linear model for each metadata/PC pair.
+
+## Seurat built-in example
 
 ```{r}
 if (!requireNamespace("Seurat", quietly = TRUE)) {
@@ -35,13 +37,36 @@ if (!requireNamespace("Seurat", quietly = TRUE)) {
 
 data("pbmc_small", package = "SeuratObject")
 seurat_obj <- pbmc_small
-res <- pc_meta_correlations(seurat_obj, reduction = "pca")
-res
+res <- pc_meta_correlations(seurat_obj, reduction = "pca", mode = "lm")
+head(res)
 ```
 
-## Plot the results
+## Plot the Seurat example
 
 ```{r}
 plot_pc_meta_heatmap(res)
 plot_top_pc_meta(res, n = 5, value = "effect_size")
 ```
+
+## Richer metadata example
+
+The `SeuratData` package provides larger example datasets.
+If installed, `pbmc3k.final` contains more metadata columns and strong PC associations.
+
+```{r}
+if (requireNamespace("SeuratData", quietly = TRUE)) {
+  SeuratData::InstallData("pbmc3k")
+  data("pbmc3k.final", package = "pbmc3k.SeuratData")
+  pbmc3k.final <- Seurat::UpdateSeuratObject(pbmc3k.final)
+
+  res2 <- pc_meta_correlations(pbmc3k.final, reduction = "pca", mode = "lm")
+  head(res2)
+  plot_pc_meta_heatmap(res2, top_n = 15, top_pcs = 8)
+}
+```
+
+## Interpreting results
+
+- `statistic` is the model coefficient for numeric metadata or the F-statistic for categorical metadata.
+- `effect_size` summarizes association strength.
+- `direction` is positive/negative for numeric metadata and the highest-scoring category for categorical metadata.

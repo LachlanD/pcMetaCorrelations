@@ -15,8 +15,10 @@ utils::globalVariables(c("pc", "metadata", "type"))
 #'   object. Default: `"pca"`.
 #' @param meta.cols Character or integer vector of metadata columns to analyse.
 #'   Default: all columns.
-#' @param method Correlation method for numeric metadata: `"pearson"` or
-#'   `"spearman"`.
+#' @param method Correlation method for numeric metadata or ranking method for
+#'   linear-model mode: `"pearson"` or `"spearman"`.
+#' @param mode Analysis mode: `"lm"` for linear regression or `"correlation"`
+#'   for simple correlation/ANOVA.
 #' @param adjust p-value adjustment method passed to `p.adjust()`.
 #'   Default: `"BH"`.
 #' @param min.cells Minimum non-missing values required for a metadata column.
@@ -35,11 +37,13 @@ pc_meta_correlations <- function(
   reduction = "pca",
   meta.cols = NULL,
   method = c("pearson", "spearman"),
+  mode = c("lm", "correlation"),
   adjust = c("BH", "bonferroni", "none"),
   min.cells = 10,
   verbose = TRUE
 ) {
   method <- match.arg(method)
+  mode <- match.arg(mode)
   adjust <- match.arg(adjust)
 
   is_seurat <- inherits(object, "Seurat") || inherits(object, "SeuratObject")
@@ -130,20 +134,30 @@ pc_meta_correlations <- function(
 
       if (var_type == "numeric") {
         if (length(unique(meta_sub)) < 2L) next
-        test <- suppressWarnings(stats::cor.test(pc_sub, meta_sub, method = method))
-        statistic <- as.numeric(test$estimate)
-        pval <- test$p.value
-        effect <- abs(statistic)
-        direction <- if (statistic > 0) "positive" else if (statistic < 0) "negative" else "zero"
+        if (mode == "correlation") {
+          test <- suppressWarnings(stats::cor.test(pc_sub, meta_sub, method = method))
+          statistic <- as.numeric(test$estimate)
+          pval <- test$p.value
+          effect <- abs(statistic)
+          direction <- if (statistic > 0) "positive" else if (statistic < 0) "negative" else "zero"
+        } else {
+          predictor <- if (method == "spearman") base::rank(meta_sub) else meta_sub
+          fit <- stats::lm(pc_sub ~ predictor)
+          coef_tab <- summary(fit)$coefficients
+          statistic <- as.numeric(coef_tab[2, "Estimate"])
+          pval <- as.numeric(coef_tab[2, "Pr(>|t|)"])
+          effect <- abs(statistic)
+          direction <- if (statistic > 0) "positive" else if (statistic < 0) "negative" else "zero"
+        }
       } else {
         meta_fac <- factor(meta_sub)
         if (nlevels(meta_fac) < 2L) next
-        fit <- stats::aov(pc_sub ~ meta_fac)
-        ss <- summary(fit)[[1]]["meta_fac", "Sum Sq"]
-        df <- summary(fit)[[1]]["meta_fac", "Df"]
-        pval <- summary(fit)[[1]]["meta_fac", "Pr(>F)"]
-        fstat <- summary(fit)[[1]]["meta_fac", "F value"]
-        total <- sum(ss, summary(fit)[[1]]["Residuals", "Sum Sq"])
+        fit <- stats::lm(pc_sub ~ meta_fac)
+        an <- summary(stats::aov(fit))[[1]]
+        ss <- an["meta_fac", "Sum Sq"]
+        pval <- an["meta_fac", "Pr(>F)"]
+        fstat <- an["meta_fac", "F value"]
+        total <- sum(an[, "Sum Sq"])
         effect <- if (total > 0) ss / total else NA_real_
         direction <- levels(meta_fac)[which.max(tapply(pc_sub, meta_fac, mean))][1]
         statistic <- as.numeric(fstat)

@@ -3,7 +3,7 @@ pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   get-started: get-started.html
-last_built: 2026-04-29T03:46Z
+last_built: 2026-04-29T05:59Z
 urls:
   reference: https://github.com/LachlanD/pcMetaCorrelations/reference
   article: https://github.com/LachlanD/pcMetaCorrelations/articles

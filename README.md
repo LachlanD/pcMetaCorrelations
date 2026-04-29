@@ -1,6 +1,12 @@
 # pcMetaCorrelations
 
-`pcMetaCorrelations` provides tools to identify metadata columns that are correlated with principal component axes.
+`pcMetaCorrelations` provides tools to identify metadata columns that are driving principal component embeddings.
+
+## What it does
+
+- Identifies metadata variables that are associated with PCA axes.
+- Supports numeric and categorical metadata.
+- Uses linear-model regression by default for more interpretable results and easier extension.
 
 ## Installation
 
@@ -9,16 +15,32 @@
 devtools::install_local("../pcMetaCorrelations")
 ```
 
-## Example
+## Quick start
 
 ```r
 library(pcMetaCorrelations)
-res <- pc_meta_correlations(pca_matrix, metadata)
+res <- pc_meta_correlations(pca_matrix, metadata, mode = "lm")
 plot_pc_meta_heatmap(res)
 plot_top_pc_meta(res, n = 10, value = "effect_size")
 ```
 
-Read the full package website at [https://lachland.github.io/pcMetaCorrelations/index.html](https://lachland.github.io/pcMetaCorrelations/index.html).
+## How it works
+
+- `mode = "lm"` fits a linear model for each metadata/PC combination.
+  - numeric metadata: `lm(PC ~ metadata)`
+  - categorical metadata: `lm(PC ~ factor(metadata))`
+- `mode = "correlation"` preserves the original correlation-based approach.
+
+## Result columns
+
+- `metadata`: metadata field name
+- `pc`: PCA axis name
+- `type`: `numeric` or `categorical`
+- `statistic`: model coefficient or test statistic
+- `p.value`: raw p-value for the association
+- `adj.p.value`: adjusted p-value
+- `effect_size`: magnitude of the association
+- `direction`: direction or top factor level
 
 ## Seurat example
 
@@ -26,7 +48,24 @@ Read the full package website at [https://lachland.github.io/pcMetaCorrelations/
 library(pcMetaCorrelations)
 if (requireNamespace("Seurat", quietly = TRUE)) {
   seurat_obj <- Seurat::pbmc_small
-  res <- pc_meta_correlations(seurat_obj, reduction = "pca")
+  res <- pc_meta_correlations(seurat_obj, reduction = "pca", mode = "lm")
   plot_pc_meta_heatmap(res)
 }
 ```
+
+## Rich metadata example
+
+For a larger Seurat dataset with more metadata, use `SeuratData::pbmc3k.final` if `SeuratData` is installed.
+
+```r
+if (requireNamespace("SeuratData", quietly = TRUE)) {
+  SeuratData::InstallData("pbmc3k")
+  SeuratData::LoadData("pbmc3k")
+  res <- pc_meta_correlations(pbmc3k.final, reduction = "pca", mode = "lm")
+  plot_pc_meta_heatmap(res, top_n = 15, top_pcs = 8)
+}
+```
+
+## Learn more
+
+Read the full package website at [https://lachland.github.io/pcMetaCorrelations/index.html](https://lachland.github.io/pcMetaCorrelations/index.html).

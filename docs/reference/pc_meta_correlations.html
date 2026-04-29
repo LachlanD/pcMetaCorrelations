@@ -63,6 +63,7 @@ metadata are tested by ANOVA and reported with eta-squared effect sizes.</p>
 <span>  reduction <span class="op">=</span> <span class="st">"pca"</span>,</span>
 <span>  meta.cols <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"pearson"</span>, <span class="st">"spearman"</span><span class="op">)</span>,</span>
+<span>  mode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lm"</span>, <span class="st">"correlation"</span><span class="op">)</span>,</span>
 <span>  adjust <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"BH"</span>, <span class="st">"bonferroni"</span>, <span class="st">"none"</span><span class="op">)</span>,</span>
 <span>  min.cells <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
@@ -95,8 +96,13 @@ Default: all columns.</p></dd>
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
-<dd><p>Correlation method for numeric metadata: <code>"pearson"</code> or
-<code>"spearman"</code>.</p></dd>
+<dd><p>Correlation method for numeric metadata or ranking method for
+linear-model mode: <code>"pearson"</code> or <code>"spearman"</code>.</p></dd>
+
+
+<dt id="arg-mode">mode<a class="anchor" aria-label="anchor" href="#arg-mode"></a></dt>
+<dd><p>Analysis mode: <code>"lm"</code> for linear regression or <code>"correlation"</code>
+for simple correlation/ANOVA.</p></dd>
 
 
 <dt id="arg-adjust">adjust<a class="anchor" aria-label="anchor" href="#arg-adjust"></a></dt>

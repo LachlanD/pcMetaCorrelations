@@ -15,6 +15,7 @@ Suggests:
     pkgdown,
     rmarkdown,
     Seurat,
+    SeuratData,
     testthat (>= 3.0.0)
 VignetteBuilder: knitr
 URL: https://github.com/LachlanD/pcMetaCorrelations

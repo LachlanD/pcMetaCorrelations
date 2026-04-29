@@ -10,13 +10,18 @@ test_that("pc_meta_correlations works for numeric and categorical metadata", {
     stringsAsFactors = FALSE
   )
 
-  res <- pc_meta_correlations(pc, metadata = meta, method = "pearson", adjust = "none", min.cells = 5)
+  res <- pc_meta_correlations(pc, metadata = meta, method = "pearson", mode = "lm", adjust = "none", min.cells = 5)
   expect_s3_class(res, "data.frame")
   expect_true(nrow(res) >= 10)
   expect_true(all(c("metadata", "pc", "type", "statistic", "p.value", "adj.p.value", "effect_size", "direction") %in% colnames(res)))
   expect_true(all(res$type %in% c("numeric", "categorical")))
   expect_equal(sum(res$metadata == "age"), 5)
   expect_equal(sum(res$metadata == "batch"), 5)
+
+  res_cor <- pc_meta_correlations(pc, metadata = meta, method = "pearson", mode = "correlation", adjust = "none", min.cells = 5)
+  expect_equal(nrow(res), nrow(res_cor))
+  expect_equal(sum(res_cor$metadata == "age"), 5)
+  expect_equal(sum(res_cor$metadata == "batch"), 5)
 })
 
 test_that("plot helpers run without error", {

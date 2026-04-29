@@ -79,19 +79,23 @@
 <h2 id="get-started">Get started<a class="anchor" aria-label="anchor" href="#get-started"></a>
 </h2>
 <p>This vignette demonstrates how to use
-<code>pc_meta_correlations</code> on real Seurat data and visualize the
+<code>pc_meta_correlations</code> on Seurat data and visualize the
 results.</p>
 <div class="section level3">
-<h3 id="install-and-load">Install and load<a class="anchor" aria-label="anchor" href="#install-and-load"></a>
+<h3 id="setup">Setup<a class="anchor" aria-label="anchor" href="#setup"></a>
 </h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/LachlanD/pcMetaCorrelations">pcMetaCorrelations</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="run-the-workflow-on-seurat-pbmc-data">Run the workflow on Seurat PBMC data<a class="anchor" aria-label="anchor" href="#run-the-workflow-on-seurat-pbmc-data"></a>
+<h3 id="linear-model-mode">Linear-model mode<a class="anchor" aria-label="anchor" href="#linear-model-mode"></a>
 </h3>
-<p>This example uses <code>Seurat::pbmc_small</code> to compute metadata
-correlations with PCA axes.</p>
+<p>The default analysis mode is <code>lm</code>, which fits a separate
+linear model for each metadata/PC pair.</p>
+</div>
+<div class="section level3">
+<h3 id="seurat-built-in-example">Seurat built-in example<a class="anchor" aria-label="anchor" href="#seurat-built-in-example"></a>
+</h3>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"Seurat"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"Please install Seurat to run this example."</span><span class="op">)</span></span>
@@ -99,241 +103,25 @@ correlations with PCA axes.</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"pbmc_small"</span>, package <span class="op">=</span> <span class="st">"SeuratObject"</span><span class="op">)</span></span>
 <span><span class="va">seurat_obj</span> <span class="op">&lt;-</span> <span class="va">pbmc_small</span></span>
-<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pc_meta_correlations.html">pc_meta_correlations</a></span><span class="op">(</span><span class="va">seurat_obj</span>, reduction <span class="op">=</span> <span class="st">"pca"</span><span class="op">)</span></span>
-<span><span class="va">res</span></span>
-<span><span class="co">#&gt;            metadata    pc        type    statistic      p.value  effect_size</span></span>
-<span><span class="co">#&gt; 1        nCount_RNA  PC_1     numeric -0.085480986 4.509012e-01 8.548099e-02</span></span>
-<span><span class="co">#&gt; 2        nCount_RNA  PC_2     numeric  0.467156261 1.251218e-05 4.671563e-01</span></span>
-<span><span class="co">#&gt; 3        nCount_RNA  PC_3     numeric -0.062339448 5.827720e-01 6.233945e-02</span></span>
-<span><span class="co">#&gt; 4        nCount_RNA  PC_4     numeric -0.464223624 1.441718e-05 4.642236e-01</span></span>
-<span><span class="co">#&gt; 5        nCount_RNA  PC_5     numeric -0.237287858 3.406225e-02 2.372879e-01</span></span>
-<span><span class="co">#&gt; 6        nCount_RNA  PC_6     numeric  0.344599356 1.747174e-03 3.445994e-01</span></span>
-<span><span class="co">#&gt; 7        nCount_RNA  PC_7     numeric -0.048146409 6.714906e-01 4.814641e-02</span></span>
-<span><span class="co">#&gt; 8        nCount_RNA  PC_8     numeric -0.185712270 9.908622e-02 1.857123e-01</span></span>
-<span><span class="co">#&gt; 9        nCount_RNA  PC_9     numeric  0.149155758 1.866704e-01 1.491558e-01</span></span>
-<span><span class="co">#&gt; 10       nCount_RNA PC_10     numeric  0.083668481 4.605929e-01 8.366848e-02</span></span>
-<span><span class="co">#&gt; 11       nCount_RNA PC_11     numeric  0.030400953 7.889328e-01 3.040095e-02</span></span>
-<span><span class="co">#&gt; 12       nCount_RNA PC_12     numeric -0.022488089 8.430459e-01 2.248809e-02</span></span>
-<span><span class="co">#&gt; 13       nCount_RNA PC_13     numeric  0.089630657 4.291442e-01 8.963066e-02</span></span>
-<span><span class="co">#&gt; 14       nCount_RNA PC_14     numeric  0.036607171 7.471653e-01 3.660717e-02</span></span>
-<span><span class="co">#&gt; 15       nCount_RNA PC_15     numeric  0.083101274 4.636492e-01 8.310127e-02</span></span>
-<span><span class="co">#&gt; 16       nCount_RNA PC_16     numeric  0.041843876 7.124750e-01 4.184388e-02</span></span>
-<span><span class="co">#&gt; 17       nCount_RNA PC_17     numeric  0.045296118 6.899158e-01 4.529612e-02</span></span>
-<span><span class="co">#&gt; 18       nCount_RNA PC_18     numeric  0.058326321 6.073123e-01 5.832632e-02</span></span>
-<span><span class="co">#&gt; 19       nCount_RNA PC_19     numeric  0.101890234 3.684745e-01 1.018902e-01</span></span>
-<span><span class="co">#&gt; 20     nFeature_RNA  PC_1     numeric -0.425008003 8.509171e-05 4.250080e-01</span></span>
-<span><span class="co">#&gt; 21     nFeature_RNA  PC_2     numeric  0.338289307 2.146609e-03 3.382893e-01</span></span>
-<span><span class="co">#&gt; 22     nFeature_RNA  PC_3     numeric  0.150500264 1.826850e-01 1.505003e-01</span></span>
-<span><span class="co">#&gt; 23     nFeature_RNA  PC_4     numeric -0.317901316 4.058345e-03 3.179013e-01</span></span>
-<span><span class="co">#&gt; 24     nFeature_RNA  PC_5     numeric -0.253266576 2.340699e-02 2.532666e-01</span></span>
-<span><span class="co">#&gt; 25     nFeature_RNA  PC_6     numeric  0.346997716 1.613861e-03 3.469977e-01</span></span>
-<span><span class="co">#&gt; 26     nFeature_RNA  PC_7     numeric -0.145347254 1.983006e-01 1.453473e-01</span></span>
-<span><span class="co">#&gt; 27     nFeature_RNA  PC_8     numeric -0.137122047 2.251707e-01 1.371220e-01</span></span>
-<span><span class="co">#&gt; 28     nFeature_RNA  PC_9     numeric  0.115819827 3.062757e-01 1.158198e-01</span></span>
-<span><span class="co">#&gt; 29     nFeature_RNA PC_10     numeric -0.079750239 4.819295e-01 7.975024e-02</span></span>
-<span><span class="co">#&gt; 30     nFeature_RNA PC_11     numeric  0.169365036 1.331285e-01 1.693650e-01</span></span>
-<span><span class="co">#&gt; 31     nFeature_RNA PC_12     numeric  0.046724174 6.806610e-01 4.672417e-02</span></span>
-<span><span class="co">#&gt; 32     nFeature_RNA PC_13     numeric  0.044353873 6.960473e-01 4.435387e-02</span></span>
-<span><span class="co">#&gt; 33     nFeature_RNA PC_14     numeric  0.006885208 9.516661e-01 6.885208e-03</span></span>
-<span><span class="co">#&gt; 34     nFeature_RNA PC_15     numeric  0.080042725 4.803188e-01 8.004272e-02</span></span>
-<span><span class="co">#&gt; 35     nFeature_RNA PC_16     numeric  0.020517507 8.566463e-01 2.051751e-02</span></span>
-<span><span class="co">#&gt; 36     nFeature_RNA PC_17     numeric  0.106592314 3.466688e-01 1.065923e-01</span></span>
-<span><span class="co">#&gt; 37     nFeature_RNA PC_18     numeric  0.038036203 7.376454e-01 3.803620e-02</span></span>
-<span><span class="co">#&gt; 38     nFeature_RNA PC_19     numeric  0.076910018 4.977191e-01 7.691002e-02</span></span>
-<span><span class="co">#&gt; 39  RNA_snn_res.0.8  PC_1 categorical  7.044658897 9.632120e-03 8.283482e-02</span></span>
-<span><span class="co">#&gt; 40  RNA_snn_res.0.8  PC_2 categorical 50.914290679 4.347290e-10 3.949468e-01</span></span>
-<span><span class="co">#&gt; 41  RNA_snn_res.0.8  PC_3 categorical 31.098662979 3.396760e-07 2.850508e-01</span></span>
-<span><span class="co">#&gt; 42  RNA_snn_res.0.8  PC_4 categorical  1.600335355 2.096221e-01 2.010463e-02</span></span>
-<span><span class="co">#&gt; 43  RNA_snn_res.0.8  PC_5 categorical  0.585015983 4.466609e-01 7.444371e-03</span></span>
-<span><span class="co">#&gt; 44  RNA_snn_res.0.8  PC_6 categorical  1.840201736 1.788408e-01 2.304856e-02</span></span>
-<span><span class="co">#&gt; 45  RNA_snn_res.0.8  PC_7 categorical  0.700217986 4.052669e-01 8.897281e-03</span></span>
-<span><span class="co">#&gt; 46  RNA_snn_res.0.8  PC_8 categorical  2.395713808 1.257162e-01 2.979902e-02</span></span>
-<span><span class="co">#&gt; 47  RNA_snn_res.0.8  PC_9 categorical  0.104701982 7.471244e-01 1.340534e-03</span></span>
-<span><span class="co">#&gt; 48  RNA_snn_res.0.8 PC_10 categorical  0.005742814 9.397871e-01 7.362040e-05</span></span>
-<span><span class="co">#&gt; 49  RNA_snn_res.0.8 PC_11 categorical  0.003085456 9.558448e-01 3.955556e-05</span></span>
-<span><span class="co">#&gt; 50  RNA_snn_res.0.8 PC_12 categorical  0.352959492 5.541618e-01 4.504737e-03</span></span>
-<span><span class="co">#&gt; 51  RNA_snn_res.0.8 PC_13 categorical  0.045484131 8.316728e-01 5.827900e-04</span></span>
-<span><span class="co">#&gt; 52  RNA_snn_res.0.8 PC_14 categorical  0.012179078 9.124082e-01 1.561176e-04</span></span>
-<span><span class="co">#&gt; 53  RNA_snn_res.0.8 PC_15 categorical  0.701927116 4.046968e-01 8.918805e-03</span></span>
-<span><span class="co">#&gt; 54  RNA_snn_res.0.8 PC_16 categorical  0.106783147 7.447119e-01 1.367143e-03</span></span>
-<span><span class="co">#&gt; 55  RNA_snn_res.0.8 PC_17 categorical  0.195789917 6.593654e-01 2.503842e-03</span></span>
-<span><span class="co">#&gt; 56  RNA_snn_res.0.8 PC_18 categorical  0.074099902 7.861776e-01 9.490971e-04</span></span>
-<span><span class="co">#&gt; 57  RNA_snn_res.0.8 PC_19 categorical  0.404915280 5.264246e-01 5.164412e-03</span></span>
-<span><span class="co">#&gt; 58    letter.idents  PC_1 categorical  7.044658897 9.632120e-03 8.283482e-02</span></span>
-<span><span class="co">#&gt; 59    letter.idents  PC_2 categorical 50.914290679 4.347290e-10 3.949468e-01</span></span>
-<span><span class="co">#&gt; 60    letter.idents  PC_3 categorical 31.098662979 3.396760e-07 2.850508e-01</span></span>
-<span><span class="co">#&gt; 61    letter.idents  PC_4 categorical  1.600335355 2.096221e-01 2.010463e-02</span></span>
-<span><span class="co">#&gt; 62    letter.idents  PC_5 categorical  0.585015983 4.466609e-01 7.444371e-03</span></span>
-<span><span class="co">#&gt; 63    letter.idents  PC_6 categorical  1.840201736 1.788408e-01 2.304856e-02</span></span>
-<span><span class="co">#&gt; 64    letter.idents  PC_7 categorical  0.700217986 4.052669e-01 8.897281e-03</span></span>
-<span><span class="co">#&gt; 65    letter.idents  PC_8 categorical  2.395713808 1.257162e-01 2.979902e-02</span></span>
-<span><span class="co">#&gt; 66    letter.idents  PC_9 categorical  0.104701982 7.471244e-01 1.340534e-03</span></span>
-<span><span class="co">#&gt; 67    letter.idents PC_10 categorical  0.005742814 9.397871e-01 7.362040e-05</span></span>
-<span><span class="co">#&gt; 68    letter.idents PC_11 categorical  0.003085456 9.558448e-01 3.955556e-05</span></span>
-<span><span class="co">#&gt; 69    letter.idents PC_12 categorical  0.352959492 5.541618e-01 4.504737e-03</span></span>
-<span><span class="co">#&gt; 70    letter.idents PC_13 categorical  0.045484131 8.316728e-01 5.827900e-04</span></span>
-<span><span class="co">#&gt; 71    letter.idents PC_14 categorical  0.012179078 9.124082e-01 1.561176e-04</span></span>
-<span><span class="co">#&gt; 72    letter.idents PC_15 categorical  0.701927116 4.046968e-01 8.918805e-03</span></span>
-<span><span class="co">#&gt; 73    letter.idents PC_16 categorical  0.106783147 7.447119e-01 1.367143e-03</span></span>
-<span><span class="co">#&gt; 74    letter.idents PC_17 categorical  0.195789917 6.593654e-01 2.503842e-03</span></span>
-<span><span class="co">#&gt; 75    letter.idents PC_18 categorical  0.074099902 7.861776e-01 9.490971e-04</span></span>
-<span><span class="co">#&gt; 76    letter.idents PC_19 categorical  0.404915280 5.264246e-01 5.164412e-03</span></span>
-<span><span class="co">#&gt; 77           groups  PC_1 categorical  0.426744187 5.155119e-01 5.441309e-03</span></span>
-<span><span class="co">#&gt; 78           groups  PC_2 categorical  0.266134445 6.073960e-01 3.400378e-03</span></span>
-<span><span class="co">#&gt; 79           groups  PC_3 categorical  0.157908081 6.921752e-01 2.020372e-03</span></span>
-<span><span class="co">#&gt; 80           groups  PC_4 categorical  0.818611972 3.683725e-01 1.038602e-02</span></span>
-<span><span class="co">#&gt; 81           groups  PC_5 categorical  6.082721165 1.584489e-02 7.234211e-02</span></span>
-<span><span class="co">#&gt; 82           groups  PC_6 categorical  0.611809285 4.364755e-01 7.782664e-03</span></span>
-<span><span class="co">#&gt; 83           groups  PC_7 categorical  0.801423224 3.734225e-01 1.017016e-02</span></span>
-<span><span class="co">#&gt; 84           groups  PC_8 categorical  0.272011468 6.034634e-01 3.475207e-03</span></span>
-<span><span class="co">#&gt; 85           groups  PC_9 categorical  0.687953757 4.093925e-01 8.742809e-03</span></span>
-<span><span class="co">#&gt; 86           groups PC_10 categorical  1.575941193 2.130942e-01 1.980424e-02</span></span>
-<span><span class="co">#&gt; 87           groups PC_11 categorical  0.521174777 4.724997e-01 6.637379e-03</span></span>
-<span><span class="co">#&gt; 88           groups PC_12 categorical  2.031246360 1.580836e-01 2.538067e-02</span></span>
-<span><span class="co">#&gt; 89           groups PC_13 categorical  1.946216837 1.669549e-01 2.434408e-02</span></span>
-<span><span class="co">#&gt; 90           groups PC_14 categorical  0.015916671 8.999289e-01 2.040183e-04</span></span>
-<span><span class="co">#&gt; 91           groups PC_15 categorical  0.010941427 9.169607e-01 1.402550e-04</span></span>
-<span><span class="co">#&gt; 92           groups PC_16 categorical  0.953354329 3.318855e-01 1.207491e-02</span></span>
-<span><span class="co">#&gt; 93           groups PC_17 categorical  2.640218912 1.082235e-01 3.274072e-02</span></span>
-<span><span class="co">#&gt; 94           groups PC_18 categorical  0.164582270 6.860830e-01 2.105586e-03</span></span>
-<span><span class="co">#&gt; 95           groups PC_19 categorical  0.846953539 3.602531e-01 1.074174e-02</span></span>
-<span><span class="co">#&gt; 96    RNA_snn_res.1  PC_1 categorical  8.552166222 4.425095e-04 1.817592e-01</span></span>
-<span><span class="co">#&gt; 97    RNA_snn_res.1  PC_2 categorical 60.701063592 1.494030e-16 6.118993e-01</span></span>
-<span><span class="co">#&gt; 98    RNA_snn_res.1  PC_3 categorical 47.763663617 3.242381e-14 5.536939e-01</span></span>
-<span><span class="co">#&gt; 99    RNA_snn_res.1  PC_4 categorical  0.873652502 4.215203e-01 2.218876e-02</span></span>
-<span><span class="co">#&gt; 100   RNA_snn_res.1  PC_5 categorical  0.595723980 5.536835e-01 1.523757e-02</span></span>
-<span><span class="co">#&gt; 101   RNA_snn_res.1  PC_6 categorical  0.916644325 4.041770e-01 2.325526e-02</span></span>
-<span><span class="co">#&gt; 102   RNA_snn_res.1  PC_7 categorical  0.509282108 6.029367e-01 1.305541e-02</span></span>
-<span><span class="co">#&gt; 103   RNA_snn_res.1  PC_8 categorical  1.004624681 3.709304e-01 2.543056e-02</span></span>
-<span><span class="co">#&gt; 104   RNA_snn_res.1  PC_9 categorical  3.384857744 3.899796e-02 8.081340e-02</span></span>
-<span><span class="co">#&gt; 105   RNA_snn_res.1 PC_10 categorical  0.559970357 5.735345e-01 1.433617e-02</span></span>
-<span><span class="co">#&gt; 106   RNA_snn_res.1 PC_11 categorical  0.241497339 7.860436e-01 6.233557e-03</span></span>
-<span><span class="co">#&gt; 107   RNA_snn_res.1 PC_12 categorical  0.856119946 4.288106e-01 2.175316e-02</span></span>
-<span><span class="co">#&gt; 108   RNA_snn_res.1 PC_13 categorical  0.264819731 7.680403e-01 6.831445e-03</span></span>
-<span><span class="co">#&gt; 109   RNA_snn_res.1 PC_14 categorical  0.142231760 8.676476e-01 3.680734e-03</span></span>
-<span><span class="co">#&gt; 110   RNA_snn_res.1 PC_15 categorical  1.105366691 3.362851e-01 2.790952e-02</span></span>
-<span><span class="co">#&gt; 111   RNA_snn_res.1 PC_16 categorical  0.394615315 6.752943e-01 1.014576e-02</span></span>
-<span><span class="co">#&gt; 112   RNA_snn_res.1 PC_17 categorical  0.299850953 7.417898e-01 7.728147e-03</span></span>
-<span><span class="co">#&gt; 113   RNA_snn_res.1 PC_18 categorical  0.650969996 5.243857e-01 1.662717e-02</span></span>
-<span><span class="co">#&gt; 114   RNA_snn_res.1 PC_19 categorical  0.054550238 9.469475e-01 1.414885e-03</span></span>
-<span><span class="co">#&gt;     direction  adj.p.value</span></span>
-<span><span class="co">#&gt; 1    negative 8.720629e-01</span></span>
-<span><span class="co">#&gt; 2    positive 2.037698e-04</span></span>
-<span><span class="co">#&gt; 3    negative 8.992616e-01</span></span>
-<span><span class="co">#&gt; 4    negative 2.054448e-04</span></span>
-<span><span class="co">#&gt; 5    negative 2.043735e-01</span></span>
-<span><span class="co">#&gt; 6    positive 1.659815e-02</span></span>
-<span><span class="co">#&gt; 7    negative 9.061366e-01</span></span>
-<span><span class="co">#&gt; 8    negative 5.378966e-01</span></span>
-<span><span class="co">#&gt; 9    positive 6.864652e-01</span></span>
-<span><span class="co">#&gt; 10   positive 8.720629e-01</span></span>
-<span><span class="co">#&gt; 11   positive 9.084680e-01</span></span>
-<span><span class="co">#&gt; 12   negative 9.422277e-01</span></span>
-<span><span class="co">#&gt; 13   positive 8.720629e-01</span></span>
-<span><span class="co">#&gt; 14   positive 9.061366e-01</span></span>
-<span><span class="co">#&gt; 15   positive 8.720629e-01</span></span>
-<span><span class="co">#&gt; 16   positive 9.061366e-01</span></span>
-<span><span class="co">#&gt; 17   positive 9.061366e-01</span></span>
-<span><span class="co">#&gt; 18   positive 8.992616e-01</span></span>
-<span><span class="co">#&gt; 19   positive 8.720629e-01</span></span>
-<span><span class="co">#&gt; 20   negative 1.077828e-03</span></span>
-<span><span class="co">#&gt; 21   positive 1.882411e-02</span></span>
-<span><span class="co">#&gt; 22   positive 6.864652e-01</span></span>
-<span><span class="co">#&gt; 23   negative 3.304652e-02</span></span>
-<span><span class="co">#&gt; 24   negative 1.482443e-01</span></span>
-<span><span class="co">#&gt; 25   positive 1.659815e-02</span></span>
-<span><span class="co">#&gt; 26   negative 6.940782e-01</span></span>
-<span><span class="co">#&gt; 27   negative 7.130406e-01</span></span>
-<span><span class="co">#&gt; 28   positive 8.720629e-01</span></span>
-<span><span class="co">#&gt; 29   negative 8.720629e-01</span></span>
-<span><span class="co">#&gt; 30   positive 6.070660e-01</span></span>
-<span><span class="co">#&gt; 31   positive 9.061366e-01</span></span>
-<span><span class="co">#&gt; 32   positive 9.061366e-01</span></span>
-<span><span class="co">#&gt; 33   positive 9.558448e-01</span></span>
-<span><span class="co">#&gt; 34   positive 8.720629e-01</span></span>
-<span><span class="co">#&gt; 35   positive 9.481328e-01</span></span>
-<span><span class="co">#&gt; 36   positive 8.720629e-01</span></span>
-<span><span class="co">#&gt; 37   positive 9.061366e-01</span></span>
-<span><span class="co">#&gt; 38   positive 8.825353e-01</span></span>
-<span><span class="co">#&gt; 39          0 6.862885e-02</span></span>
-<span><span class="co">#&gt; 40          1 1.238978e-08</span></span>
-<span><span class="co">#&gt; 41          1 6.453845e-06</span></span>
-<span><span class="co">#&gt; 42          0 6.940782e-01</span></span>
-<span><span class="co">#&gt; 43          0 8.720629e-01</span></span>
-<span><span class="co">#&gt; 44          1 6.864652e-01</span></span>
-<span><span class="co">#&gt; 45          1 8.720629e-01</span></span>
-<span><span class="co">#&gt; 46          0 5.971521e-01</span></span>
-<span><span class="co">#&gt; 47          1 9.061366e-01</span></span>
-<span><span class="co">#&gt; 48          1 9.558448e-01</span></span>
-<span><span class="co">#&gt; 49          1 9.558448e-01</span></span>
-<span><span class="co">#&gt; 50          1 8.897810e-01</span></span>
-<span><span class="co">#&gt; 51          0 9.387197e-01</span></span>
-<span><span class="co">#&gt; 52          1 9.558448e-01</span></span>
-<span><span class="co">#&gt; 53          0 8.720629e-01</span></span>
-<span><span class="co">#&gt; 54          0 9.061366e-01</span></span>
-<span><span class="co">#&gt; 55          0 9.061366e-01</span></span>
-<span><span class="co">#&gt; 56          1 9.084680e-01</span></span>
-<span><span class="co">#&gt; 57          0 8.825353e-01</span></span>
-<span><span class="co">#&gt; 58          A 6.862885e-02</span></span>
-<span><span class="co">#&gt; 59          B 1.238978e-08</span></span>
-<span><span class="co">#&gt; 60          B 6.453845e-06</span></span>
-<span><span class="co">#&gt; 61          A 6.940782e-01</span></span>
-<span><span class="co">#&gt; 62          A 8.720629e-01</span></span>
-<span><span class="co">#&gt; 63          B 6.864652e-01</span></span>
-<span><span class="co">#&gt; 64          B 8.720629e-01</span></span>
-<span><span class="co">#&gt; 65          A 5.971521e-01</span></span>
-<span><span class="co">#&gt; 66          B 9.061366e-01</span></span>
-<span><span class="co">#&gt; 67          B 9.558448e-01</span></span>
-<span><span class="co">#&gt; 68          B 9.558448e-01</span></span>
-<span><span class="co">#&gt; 69          B 8.897810e-01</span></span>
-<span><span class="co">#&gt; 70          A 9.387197e-01</span></span>
-<span><span class="co">#&gt; 71          B 9.558448e-01</span></span>
-<span><span class="co">#&gt; 72          A 8.720629e-01</span></span>
-<span><span class="co">#&gt; 73          A 9.061366e-01</span></span>
-<span><span class="co">#&gt; 74          A 9.061366e-01</span></span>
-<span><span class="co">#&gt; 75          B 9.084680e-01</span></span>
-<span><span class="co">#&gt; 76          A 8.825353e-01</span></span>
-<span><span class="co">#&gt; 77         g2 8.825353e-01</span></span>
-<span><span class="co">#&gt; 78         g2 8.992616e-01</span></span>
-<span><span class="co">#&gt; 79         g2 9.061366e-01</span></span>
-<span><span class="co">#&gt; 80         g2 8.720629e-01</span></span>
-<span><span class="co">#&gt; 81         g2 1.062539e-01</span></span>
-<span><span class="co">#&gt; 82         g1 8.720629e-01</span></span>
-<span><span class="co">#&gt; 83         g1 8.720629e-01</span></span>
-<span><span class="co">#&gt; 84         g2 8.992616e-01</span></span>
-<span><span class="co">#&gt; 85         g1 8.720629e-01</span></span>
-<span><span class="co">#&gt; 86         g2 6.940782e-01</span></span>
-<span><span class="co">#&gt; 87         g2 8.720629e-01</span></span>
-<span><span class="co">#&gt; 88         g2 6.864652e-01</span></span>
-<span><span class="co">#&gt; 89         g1 6.864652e-01</span></span>
-<span><span class="co">#&gt; 90         g2 9.558448e-01</span></span>
-<span><span class="co">#&gt; 91         g2 9.558448e-01</span></span>
-<span><span class="co">#&gt; 92         g1 8.720629e-01</span></span>
-<span><span class="co">#&gt; 93         g1 5.607944e-01</span></span>
-<span><span class="co">#&gt; 94         g1 9.061366e-01</span></span>
-<span><span class="co">#&gt; 95         g1 8.720629e-01</span></span>
-<span><span class="co">#&gt; 96          0 5.044609e-03</span></span>
-<span><span class="co">#&gt; 97          1 1.703195e-14</span></span>
-<span><span class="co">#&gt; 98          1 1.848157e-12</span></span>
-<span><span class="co">#&gt; 99          2 8.720629e-01</span></span>
-<span><span class="co">#&gt; 100         2 8.897810e-01</span></span>
-<span><span class="co">#&gt; 101         1 8.720629e-01</span></span>
-<span><span class="co">#&gt; 102         1 8.992616e-01</span></span>
-<span><span class="co">#&gt; 103         2 8.720629e-01</span></span>
-<span><span class="co">#&gt; 104         0 2.222884e-01</span></span>
-<span><span class="co">#&gt; 105         0 8.992616e-01</span></span>
-<span><span class="co">#&gt; 106         1 9.084680e-01</span></span>
-<span><span class="co">#&gt; 107         2 8.720629e-01</span></span>
-<span><span class="co">#&gt; 108         0 9.084680e-01</span></span>
-<span><span class="co">#&gt; 109         1 9.510752e-01</span></span>
-<span><span class="co">#&gt; 110         2 8.720629e-01</span></span>
-<span><span class="co">#&gt; 111         2 9.061366e-01</span></span>
-<span><span class="co">#&gt; 112         0 9.061366e-01</span></span>
-<span><span class="co">#&gt; 113         2 8.825353e-01</span></span>
-<span><span class="co">#&gt; 114         1 9.558448e-01</span></span></code></pre></div>
+<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pc_meta_correlations.html">pc_meta_correlations</a></span><span class="op">(</span><span class="va">seurat_obj</span>, reduction <span class="op">=</span> <span class="st">"pca"</span>, mode <span class="op">=</span> <span class="st">"lm"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
+<span><span class="co">#&gt;     metadata   pc    type    statistic      p.value effect_size direction</span></span>
+<span><span class="co">#&gt; 1 nCount_RNA PC_1 numeric -0.001260951 4.509012e-01 0.001260951  negative</span></span>
+<span><span class="co">#&gt; 2 nCount_RNA PC_2 numeric  0.003992369 1.251218e-05 0.003992369  positive</span></span>
+<span><span class="co">#&gt; 3 nCount_RNA PC_3 numeric -0.000434337 5.827720e-01 0.000434337  negative</span></span>
+<span><span class="co">#&gt; 4 nCount_RNA PC_4 numeric -0.002762158 1.441718e-05 0.002762158  negative</span></span>
+<span><span class="co">#&gt; 5 nCount_RNA PC_5 numeric -0.001299648 3.406225e-02 0.001299648  negative</span></span>
+<span><span class="co">#&gt; 6 nCount_RNA PC_6 numeric  0.001801481 1.747174e-03 0.001801481  positive</span></span>
+<span><span class="co">#&gt;    adj.p.value</span></span>
+<span><span class="co">#&gt; 1 0.8720628761</span></span>
+<span><span class="co">#&gt; 2 0.0002037698</span></span>
+<span><span class="co">#&gt; 3 0.8992615761</span></span>
+<span><span class="co">#&gt; 4 0.0002054448</span></span>
+<span><span class="co">#&gt; 5 0.2043734863</span></span>
+<span><span class="co">#&gt; 6 0.0165981500</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="plot-the-results">Plot the results<a class="anchor" aria-label="anchor" href="#plot-the-results"></a>
+<h3 id="plot-the-seurat-example">Plot the Seurat example<a class="anchor" aria-label="anchor" href="#plot-the-seurat-example"></a>
 </h3>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_pc_meta_heatmap.html">plot_pc_meta_heatmap</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></code></pre></div>
@@ -341,6 +129,77 @@ correlations with PCA axes.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_top_pc_meta.html">plot_top_pc_meta</a></span><span class="op">(</span><span class="va">res</span>, n <span class="op">=</span> <span class="fl">5</span>, value <span class="op">=</span> <span class="st">"effect_size"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="get-started_files/figure-html/unnamed-chunk-3-2.png" class="r-plt" alt="" width="700"></p>
+</div>
+<div class="section level3">
+<h3 id="richer-metadata-example">Richer metadata example<a class="anchor" aria-label="anchor" href="#richer-metadata-example"></a>
+</h3>
+<p>The <code>SeuratData</code> package provides larger example datasets.
+If installed, <code>pbmc3k.final</code> contains more metadata columns
+and strong PC associations.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"SeuratData"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu">SeuratData</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/InstallData.html" class="external-link">InstallData</a></span><span class="op">(</span><span class="st">"pbmc3k"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"pbmc3k.final"</span>, package <span class="op">=</span> <span class="st">"pbmc3k.SeuratData"</span><span class="op">)</span></span>
+<span>  <span class="va">pbmc3k.final</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/UpdateSeuratObject.html" class="external-link">UpdateSeuratObject</a></span><span class="op">(</span><span class="va">pbmc3k.final</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">res2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pc_meta_correlations.html">pc_meta_correlations</a></span><span class="op">(</span><span class="va">pbmc3k.final</span>, reduction <span class="op">=</span> <span class="st">"pca"</span>, mode <span class="op">=</span> <span class="st">"lm"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res2</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="../reference/plot_pc_meta_heatmap.html">plot_pc_meta_heatmap</a></span><span class="op">(</span><span class="va">res2</span>, top_n <span class="op">=</span> <span class="fl">15</span>, top_pcs <span class="op">=</span> <span class="fl">8</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="co">#&gt; Warning: The following packages are already installed and will not be</span></span>
+<span><span class="co">#&gt; reinstalled: pbmc3k</span></span>
+<span><span class="co">#&gt; Validating object structure</span></span>
+<span><span class="co">#&gt; Updating object slots</span></span>
+<span><span class="co">#&gt; Ensuring keys are in the proper structure</span></span>
+<span><span class="co">#&gt; Updating matrix keys for DimReduc 'pca'</span></span>
+<span><span class="co">#&gt; Updating matrix keys for DimReduc 'umap'</span></span>
+<span><span class="co">#&gt; Warning: Assay RNA changing from Assay to Assay</span></span>
+<span><span class="co">#&gt; Warning: Graph RNA_nn changing from Graph to Graph</span></span>
+<span><span class="co">#&gt; Warning: Graph RNA_snn changing from Graph to Graph</span></span>
+<span><span class="co">#&gt; Warning: DimReduc pca changing from DimReduc to DimReduc</span></span>
+<span><span class="co">#&gt; Warning: DimReduc umap changing from DimReduc to DimReduc</span></span>
+<span><span class="co">#&gt; Ensuring keys are in the proper structure</span></span>
+<span><span class="co">#&gt; Ensuring feature names don't have underscores or pipes</span></span>
+<span><span class="co">#&gt; Updating slots in RNA</span></span>
+<span><span class="co">#&gt; Updating slots in RNA_nn</span></span>
+<span><span class="co">#&gt; Setting default assay of RNA_nn to RNA</span></span>
+<span><span class="co">#&gt; Updating slots in RNA_snn</span></span>
+<span><span class="co">#&gt; Setting default assay of RNA_snn to RNA</span></span>
+<span><span class="co">#&gt; Updating slots in pca</span></span>
+<span><span class="co">#&gt; Updating slots in umap</span></span>
+<span><span class="co">#&gt; Setting umap DimReduc to global</span></span>
+<span><span class="co">#&gt; Setting assay used for NormalizeData.RNA to RNA</span></span>
+<span><span class="co">#&gt; Setting assay used for FindVariableFeatures.RNA to RNA</span></span>
+<span><span class="co">#&gt; Setting assay used for ScaleData.RNA to RNA</span></span>
+<span><span class="co">#&gt; Setting assay used for RunPCA.RNA to RNA</span></span>
+<span><span class="co">#&gt; Setting assay used for JackStraw.RNA.pca to RNA</span></span>
+<span><span class="co">#&gt; No assay information could be found for ScoreJackStraw</span></span>
+<span><span class="co">#&gt; Warning: Adding a command log without an assay associated with it</span></span>
+<span><span class="co">#&gt; Setting assay used for FindNeighbors.RNA.pca to RNA</span></span>
+<span><span class="co">#&gt; No assay information could be found for FindClusters</span></span>
+<span><span class="co">#&gt; Warning: Adding a command log without an assay associated with it</span></span>
+<span><span class="co">#&gt; Setting assay used for RunUMAP.RNA.pca to RNA</span></span>
+<span><span class="co">#&gt; Validating object structure for Assay 'RNA'</span></span>
+<span><span class="co">#&gt; Validating object structure for Graph 'RNA_nn'</span></span>
+<span><span class="co">#&gt; Validating object structure for Graph 'RNA_snn'</span></span>
+<span><span class="co">#&gt; Validating object structure for DimReduc 'pca'</span></span>
+<span><span class="co">#&gt; Validating object structure for DimReduc 'umap'</span></span>
+<span><span class="co">#&gt; Object representation is consistent with the most current Seurat version</span></span></code></pre></div>
+<p><img src="get-started_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="700"></p>
+</div>
+<div class="section level3">
+<h3 id="interpreting-results">Interpreting results<a class="anchor" aria-label="anchor" href="#interpreting-results"></a>
+</h3>
+<ul>
+<li>
+<code>statistic</code> is the model coefficient for numeric metadata
+or the F-statistic for categorical metadata.</li>
+<li>
+<code>effect_size</code> summarizes association strength.</li>
+<li>
+<code>direction</code> is positive/negative for numeric metadata and
+the highest-scoring category for categorical metadata.</li>
+</ul>
 </div>
 </div>
   </div>
