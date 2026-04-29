@@ -1,0 +1,16 @@
+Package: pcMetaCorrelations
+Type: Package
+Title: Identify Correlations Between PCA Axes and Metadata Variables
+Version: 0.1.0
+Authors@R: person("Package", "Author", email = "you@example.com", role = c("aut", "cre"))
+Description: Tools for diagnosing associations between principal component embeddings and metadata variables, including numeric and categorical metadata.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports:
+    ggplot2
+Suggests:
+    testthat (>= 3.0.0),
+    Seurat
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
