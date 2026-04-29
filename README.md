@@ -18,7 +18,7 @@ plot_pc_meta_heatmap(res)
 plot_top_pc_meta(res, n = 10, value = "effect_size")
 ```
 
-Read the full package website at [docs/index.html](docs/index.html).
+Read the full package website at [https://lachland.github.io/](https://lachland.github.io/).
 
 ## Seurat example
 
