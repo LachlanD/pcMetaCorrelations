@@ -17,6 +17,7 @@ Suggests:
     Seurat,
     testthat (>= 3.0.0)
 VignetteBuilder: knitr
-URL: https://github.com/pcMetaCorrelations/pcMetaCorrelations
+URL: https://github.com/LachlanD/pcMetaCorrelations
+BugReports: https://github.com/LachlanD/pcMetaCorrelations/issues
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3

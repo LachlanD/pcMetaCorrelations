@@ -48,7 +48,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/pcMetaCorrelations/pcMetaCorrelations/">
+  <a href="https://github.com/LachlanD/pcMetaCorrelations/">
     <span class="fab fa-github fa-lg"></span>
 
   </a>
@@ -80,17 +80,17 @@
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/pcMetaCorrelations/pcMetaCorrelations">pcMetaCorrelations</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/LachlanD/pcMetaCorrelations">pcMetaCorrelations</a></span><span class="op">)</span></span>
 <span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/pc_meta_correlations.html">pc_meta_correlations</a></span><span class="op">(</span><span class="va">pca_matrix</span>, <span class="va">metadata</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/plot_pc_meta_heatmap.html">plot_pc_meta_heatmap</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/plot_top_pc_meta.html">plot_top_pc_meta</a></span><span class="op">(</span><span class="va">res</span>, n <span class="op">=</span> <span class="fl">10</span>, value <span class="op">=</span> <span class="st">"effect_size"</span><span class="op">)</span></span></code></pre></div>
-<p>Read the full package website at <a href="docs/index.html">docs/index.html</a>.</p>
+<p>Read the full package website at <a href="https://lachland.github.io/" class="external-link">https://lachland.github.io/</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="seurat-example">Seurat example<a class="anchor" aria-label="anchor" href="#seurat-example"></a>
 </h2>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/pcMetaCorrelations/pcMetaCorrelations">pcMetaCorrelations</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/LachlanD/pcMetaCorrelations">pcMetaCorrelations</a></span><span class="op">)</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"Seurat"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">seurat_obj</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="va">pbmc_small</span></span>
 <span>  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/pc_meta_correlations.html">pc_meta_correlations</a></span><span class="op">(</span><span class="va">seurat_obj</span>, reduction <span class="op">=</span> <span class="st">"pca"</span><span class="op">)</span></span>
@@ -104,7 +104,8 @@
     <div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/pcMetaCorrelations/pcMetaCorrelations/">Browse source code</a></li>
+<li><a href="https://github.com/LachlanD/pcMetaCorrelations/">Browse source code</a></li>
+<li><a href="https://github.com/LachlanD/pcMetaCorrelations/issues">Report a bug</a></li>
 </ul>
 </div>
 
